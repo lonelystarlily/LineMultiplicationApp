@@ -17,112 +17,131 @@
             // 선 길이 계산용 계수 (자릿수 + 여유)
             int digits1 = num1.ToString().Length;
             int digits2 = num2.ToString().Length;
-            lineLengthFactor = digits1 + digits2 + 1;
+            int totalDigits = digits1 + digits2;
+
+            // 자릿수가 작으면 더 길게
+            if (totalDigits <= 3)
+                lineLengthFactor = 7; // 길게
+            else if (totalDigits <= 5)
+                lineLengthFactor = 6;  // 중간
+            else
+                lineLengthFactor = totalDigits + 1;
         }
 
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
-            string str1 = num1.ToString();
-            string str2 = num2.ToString();
 
-            canvas.StrokeSize = 1;
-            canvas.FontSize = 12;
-
-            List<List<(PointF p1, PointF p2)>> redLinesByDigit = new();
-            List<List<(PointF p1, PointF p2)>> blueLinesByDigit = new();
-
-            // 빨간 선 (↗ 방향) - 첫 번째 숫자
-
-            for (int i = 0; i < str1.Length; i++)
+            try
             {
-                int count = str1[i] - '0';
-                List<(PointF, PointF)> digitLines = new();
+                string str1 = num1.ToString();
+                string str2 = num2.ToString();
 
-                for (int k = 0; k < count; k++)
+                canvas.StrokeSize = 1;
+                canvas.FontSize = 12;
+
+                List<List<(PointF p1, PointF p2)>> redLinesByDigit = new();
+                List<List<(PointF p1, PointF p2)>> blueLinesByDigit = new();
+
+                // 빨간 선 (↗ 방향) - 첫 번째 숫자
+
+                for (int i = 0; i < str1.Length; i++)
                 {
-                    float offset = k * 4;
-                    float x1 = i * spacing + offset;
-                    float y1 = spacing * (str2.Length + 5);
-                    float x2 = x1 + spacing * lineLengthFactor;
-                    float y2 = y1 - spacing * lineLengthFactor;
+                    int count = str1[i] - '0';
+                    List<(PointF, PointF)> digitLines = new();
 
-                    canvas.StrokeColor = Colors.Red;
-                    canvas.DrawLine(x1, y1, x2, y2);
-
-                    digitLines.Add((new PointF(x1, y1), new PointF(x2, y2)));
-                }
-
-                redLinesByDigit.Add(digitLines);
-            }
-
-
-            // 파란 선 (↘ 방향) - 두 번째 숫자
-            for (int j = 0; j < str2.Length; j++)
-            {
-                int count = str2[j] - '0';
-                List<(PointF, PointF)> digitLines = new();
-
-                for (int k = 0; k < count; k++)
-                {
-                    float offset = k * 4;
-                    float x1 = j * spacing + offset;
-                    float y1 = 0;
-                    float x2 = x1 + spacing * lineLengthFactor;
-                    float y2 = y1 + spacing * lineLengthFactor;
-
-                    canvas.StrokeColor = Colors.Blue;
-                    canvas.DrawLine(x1, y1, x2, y2);
-
-                    digitLines.Add((new PointF(x1, y1), new PointF(x2, y2)));
-                }
-
-                blueLinesByDigit.Add(digitLines);
-            }
-
-
-            // 교점 표시 + 위치 기반 가중치(자릿수) 계산
-            canvas.FillColor = Colors.Green;
-            float maxY = spacing * (str2.Length + 5);
-            float minY = 0;
-            float verticalRange = maxY - minY;
-
-            int totalValue = 0;
-
-            for (int i = 0; i < redLinesByDigit.Count; i++) // ↗ 자릿수 (num1)
-            {
-                int place1 = str1.Length - 1 - i;
-
-                foreach (var red in redLinesByDigit[i])
-                {
-                    for (int j = 0; j < blueLinesByDigit.Count; j++) // ↘ 자릿수 (num2)
+                    for (int k = 0; k < count; k++)
                     {
-                        int place2 = str2.Length - 1 - j;
+                        float offset = k * 4;
+                        float x1 = i * spacing + offset;
+                        float y1 = spacing * (str2.Length + 5);
+                        float x2 = x1 + spacing * lineLengthFactor;
+                        float y2 = y1 - spacing * lineLengthFactor;
 
-                        foreach (var blue in blueLinesByDigit[j])
+                        canvas.StrokeColor = Colors.Red;
+                        canvas.DrawLine(x1, y1, x2, y2);
+
+                        digitLines.Add((new PointF(x1, y1), new PointF(x2, y2)));
+                    }
+
+                    redLinesByDigit.Add(digitLines);
+                }
+
+
+                // 파란 선 (↘ 방향) - 두 번째 숫자
+                for (int j = 0; j < str2.Length; j++)
+                {
+                    int count = str2[j] - '0';
+                    List<(PointF, PointF)> digitLines = new();
+
+                    for (int k = 0; k < count; k++)
+                    {
+                        float offset = k * 4;
+                        float x1 = j * spacing + offset;
+                        float y1 = 0;
+                        float x2 = x1 + spacing * lineLengthFactor;
+                        float y2 = y1 + spacing * lineLengthFactor;
+
+                        canvas.StrokeColor = Colors.Blue;
+                        canvas.DrawLine(x1, y1, x2, y2);
+
+                        digitLines.Add((new PointF(x1, y1), new PointF(x2, y2)));
+                    }
+
+                    blueLinesByDigit.Add(digitLines);
+                }
+
+
+                // 교점 표시 + 위치 기반 가중치(자릿수) 계산
+                canvas.FillColor = Colors.Green;
+                float maxY = spacing * (str2.Length + 5);
+                float minY = 0;
+                float verticalRange = maxY - minY;
+
+                int totalValue = 0;
+
+                for (int i = 0; i < redLinesByDigit.Count; i++) // ↗ 자릿수 (num1)
+                {
+                    int place1 = str1.Length - 1 - i;
+
+                    foreach (var red in redLinesByDigit[i])
+                    {
+                        for (int j = 0; j < blueLinesByDigit.Count; j++) // ↘ 자릿수 (num2)
                         {
-                            if (TryGetLineIntersection(red.p1, red.p2, blue.p1, blue.p2, out PointF intersection))
-                            {
-                                canvas.FillColor = Colors.Green;
-                                canvas.FillCircle(intersection.X, intersection.Y, 2);
+                            int place2 = str2.Length - 1 - j;
 
-                                int power = place1 + place2;
-                                totalValue += (int)Math.Pow(10, power);
+                            foreach (var blue in blueLinesByDigit[j])
+                            {
+                                if (TryGetLineIntersection(red.p1, red.p2, blue.p1, blue.p2, out PointF intersection))
+                                {
+                                    canvas.FillColor = Colors.Green;
+                                    canvas.FillCircle(intersection.X, intersection.Y, 2);
+
+                                    int power = place1 + place2;
+                                    totalValue += (int)Math.Pow(10, power);
+                                }
                             }
                         }
                     }
                 }
+
+
+                // 실제 곱셈 결과와 비교
+                int actualProduct = num1 * num2;
+                bool isCorrect = totalValue == actualProduct;
+
+                // 결과 출력
+                resultCallback?.Invoke(
+                    $"시각적 계산값: {totalValue}\n" +
+                    $"실제 곱셈값: {actualProduct}\n" +
+                    $"일치 여부: {(isCorrect ? "일치 ✅" : "오류 ❌")}");
+
+
+                Console.WriteLine("Draw completed without exception.");
             }
-
-
-            // 실제 곱셈 결과와 비교
-            int actualProduct = num1 * num2;
-            bool isCorrect = totalValue == actualProduct;
-
-            // 결과 출력
-            resultCallback?.Invoke(
-                $"시각적 계산값: {totalValue}\n" +
-                $"실제 곱셈값: {actualProduct}\n" +
-                $"일치 여부: {(isCorrect ? "일치 ✅" : "오류 ❌")}");
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Draw Error] {ex.Message}\n{ex.StackTrace}");
+            }
         }
 
         // 두 선분의 교차점 구하기
