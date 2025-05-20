@@ -3,31 +3,33 @@
              x:Class="LineMultiplicationApp.MainPage">
 
     <VerticalStackLayout Padding="20" Spacing="10">
-
-        <Label Text="선 긋기 곱셈법" FontSize="24" HorizontalOptions="Center" />
+        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+            <Label Text="선 긋기 곱셈법" FontSize="24" HorizontalOptions="Center" />
+            <Label Text=" by github/lonelystarlily (정해운찬)" FontSize="10" HorizontalOptions="Center"  VerticalTextAlignment="End"/>
+        </HorizontalStackLayout>
 
         <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
             <Entry x:Name="Number1Entry"
-               Placeholder="첫 번째 숫자"
-               WidthRequest="100"
-               Keyboard="Numeric"
-               HorizontalTextAlignment="Center"/>
+            Placeholder="첫 번째 숫자"
+            WidthRequest="100"
+            Keyboard="Numeric"
+            HorizontalTextAlignment="Center"/>
 
             <Label Text="×"
-               FontSize="24"
-               VerticalTextAlignment="Center"/>
+            FontSize="24"
+            VerticalTextAlignment="Center"/>
 
             <Entry x:Name="Number2Entry"
-               Placeholder="두 번째 숫자"
-               WidthRequest="100"
-               Keyboard="Numeric"
-               HorizontalTextAlignment="Center"/>
+            Placeholder="두 번째 숫자"
+            WidthRequest="100"
+            Keyboard="Numeric"
+            HorizontalTextAlignment="Center"/>
 
             <Button Text="계산"
-                Clicked="OnVisualizeClicked"
-                VerticalOptions="Center"
-                BackgroundColor="#007AFF"
-                TextColor="White"/>
+            Clicked="OnVisualizeClicked"
+            VerticalOptions="Center"
+            BackgroundColor="#007AFF"
+            TextColor="White"/>
         </HorizontalStackLayout>
 
         <Label x:Name="ResultLabel"
