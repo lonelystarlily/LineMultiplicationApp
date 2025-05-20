@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineMultiplicationApp", "LineMultiplicationApp\LineMultiplicationApp.csproj", "{FB18DED8-1A93-40D3-B21C-84C9572D463B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB18DED8-1A93-40D3-B21C-84C9572D463B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB18DED8-1A93-40D3-B21C-84C9572D463B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB18DED8-1A93-40D3-B21C-84C9572D463B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB18DED8-1A93-40D3-B21C-84C9572D463B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D754CE67-8E91-49B2-892A-03661FD78EB4}
+	EndGlobalSection
+EndGlobal

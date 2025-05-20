@@ -1,0 +1,47 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LineMultiplicationApp.MainPage">
+
+    <VerticalStackLayout Padding="20" Spacing="10">
+
+        <Label Text="선 긋기 곱셈법" FontSize="24" HorizontalOptions="Center" />
+
+        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+            <Entry x:Name="Number1Entry"
+               Placeholder="첫 번째 숫자"
+               WidthRequest="100"
+               Keyboard="Numeric"
+               HorizontalTextAlignment="Center"/>
+
+            <Label Text="×"
+               FontSize="24"
+               VerticalTextAlignment="Center"/>
+
+            <Entry x:Name="Number2Entry"
+               Placeholder="두 번째 숫자"
+               WidthRequest="100"
+               Keyboard="Numeric"
+               HorizontalTextAlignment="Center"/>
+
+            <Button Text="계산"
+                Clicked="OnVisualizeClicked"
+                VerticalOptions="Center"
+                BackgroundColor="#007AFF"
+                TextColor="White"/>
+        </HorizontalStackLayout>
+
+        <Label x:Name="ResultLabel"
+           FontSize="18"
+           TextColor="Black"
+           LineBreakMode="WordWrap"
+           Margin="0,10,0,0"/>
+
+        <ScrollView Orientation="Both">
+            <GraphicsView x:Name="LineCanvas"
+                  HeightRequest="400"
+                  BackgroundColor="#FAFAFA"
+                  Margin="0,10,0,0"/>
+        </ScrollView>
+
+    </VerticalStackLayout>
+</ContentPage>
