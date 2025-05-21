@@ -7,8 +7,9 @@ namespace LineMultiplicationApp
         // 숫자 두 개를 저장
         private readonly int num1, num2;
 
-        // 기본 간격 설정 (숫자 간 간격)
-        private readonly float spacing = 40;
+
+        // (붙은 선 간격)
+        private readonly float spacing2 = 10;
 
         // 선 길이 조정용 계수 (자릿수에 따라 달라짐)
         private readonly int lineLengthFactor;
@@ -31,10 +32,27 @@ namespace LineMultiplicationApp
             lineLengthFactor = totalDigits <= 3 ? 7 : totalDigits <= 5 ? 6 : totalDigits + 1;
         }
 
+        public float Scale { get; set; } = 1.0f;
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
+            float offsetXByDevice = 0;
+            float offsetYByDevice = 0;
+            if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+            {
+                offsetXByDevice = 400;
+                offsetYByDevice = 100;
+            }
+            else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
+            {
+                offsetXByDevice = 100;
+                offsetYByDevice = 100;
+            }
+
             try
             {
+                canvas.SaveState();
+                canvas.Scale(Scale, Scale);
+
                 string str1 = num1.ToString();
                 string str2 = num2.ToString();
 
@@ -44,7 +62,8 @@ namespace LineMultiplicationApp
                 List<List<(PointF p1, PointF p2)>> redLinesByDigit = new();
                 List<List<(PointF p1, PointF p2)>> blueLinesByDigit = new();
 
-                // 빨간 선 길이 증가: 모든 파란 선과 교차하도록 설정
+                float spacing = dirtyRect.Width / (Math.Max(str1.Length, str2.Length) + 5);
+
                 float redLineLength = (Math.Max(str1.Length, str2.Length) + lineLengthFactor + 3) * spacing;
 
                 // 첫 번째 숫자의 빨간 선 (↗ 방향)
@@ -55,9 +74,9 @@ namespace LineMultiplicationApp
 
                     for (int k = 0; k < count; k++)
                     {
-                        float offset = k * 4;
-                        float x1 = i * spacing + offset;
-                        float y1 = spacing * (str2.Length + 7);
+                        float offset = k * spacing2;
+                        float x1 = i * spacing + offset + offsetXByDevice;
+                        float y1 = spacing * (str2.Length + 7) * 0.5f + offsetYByDevice;
                         float x2 = x1 + redLineLength;
                         float y2 = y1 - redLineLength;
 
@@ -80,9 +99,9 @@ namespace LineMultiplicationApp
 
                     for (int k = 0; k < count; k++)
                     {
-                        float offset = k * 4;
-                        float x1 = j * spacing + offset;
-                        float y1 = 0;
+                        float offset = k * spacing2;
+                        float x1 = j * spacing + offset + offsetXByDevice;
+                        float y1 = offsetYByDevice;
                         float x2 = x1 + spacing * (lineLengthFactor + 2); // 파란 선 길이 연장
                         float y2 = y1 + spacing * (lineLengthFactor + 2); // 모든 빨간 선과 교차하도록 설정
 
@@ -135,12 +154,13 @@ namespace LineMultiplicationApp
 
                 resultCallback?.Invoke(
                     $"시각적 계산값: {totalValue}\n" +
-                    $"실제 곱셈값: {actualProduct}\n" +
-                    $"일치 여부: {(isCorrect ? "일치 ✅" : "오류 ❌")}");
+                    $"실제 곱셈값: {actualProduct}\n");
+
+                canvas.RestoreState();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"오류 발생: {ex.Message}");
+                Console.WriteLine($"오류: {ex.Message}");
             }
         }
 
