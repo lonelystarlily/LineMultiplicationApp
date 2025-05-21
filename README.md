@@ -19,8 +19,7 @@
 4. 결과와 비교값 표시
 
 ## 예시
-
-12 × 32 → 시각화 → 384 출력
+![image](https://github.com/user-attachments/assets/62800464-ea58-476b-bb85-cf1b60414e5b)
 
 ## 사용 기술
 
